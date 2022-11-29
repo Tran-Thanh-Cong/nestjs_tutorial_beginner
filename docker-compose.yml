@@ -1,0 +1,35 @@
+version: '3.8'
+
+networks:
+  default:
+
+services:
+  backend:
+    container_name: nestjs-backend
+    image: nestjs:latest
+    ports:
+      - 5000:5000
+    networks:
+      default:
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    links:
+      - database
+    depends_on:
+      - database
+
+  database:
+    container_name: mysql-database
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db_mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=mydb
+      - MYSQL_ROOT_PASSWORD=060500
+    networks:
+      default:
